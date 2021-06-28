@@ -24,6 +24,11 @@ class Sport
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -57,6 +62,18 @@ class Sport
         if ($this->users->removeElement($user)) {
             $user->removeSport($this);
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
