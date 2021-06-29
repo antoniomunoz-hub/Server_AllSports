@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\Sport;
 use Symfony\Component\HttpFoundation\UrlHelper;
 
-class sportNormalizee
+class SportNormalizee
 {
     private $urlHelper;
 
