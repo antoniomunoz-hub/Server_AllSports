@@ -77,10 +77,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $country;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="meContacts")
+     */
+    private $contacts;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="contacts")
+     */
+    private $meContacts;
+
     public function __construct()
     {
         $this->sports = new ArrayCollection();
         $this->posts = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
+        $this->meContacts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -294,6 +306,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCountry(string $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(self $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+        }
+
+        return $this;
+    }
+
+    public function removeContact(self $contact): self
+    {
+        $this->contacts->removeElement($contact);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getMeContacts(): Collection
+    {
+        return $this->meContacts;
+    }
+
+    public function addMeContact(self $meContact): self
+    {
+        if (!$this->meContacts->contains($meContact)) {
+            $this->meContacts[] = $meContact;
+            $meContact->addContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMeContact(self $meContact): self
+    {
+        if ($this->meContacts->removeElement($meContact)) {
+            $meContact->removeContact($this);
+        }
 
         return $this;
     }
