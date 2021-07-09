@@ -50,6 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
+    // TODO: Borar esta propiedad y sus mñetodos asociados.
     private $discipline;
 
     /**

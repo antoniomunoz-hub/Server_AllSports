@@ -27,7 +27,7 @@ class Post
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $tittle;
-
+    
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
