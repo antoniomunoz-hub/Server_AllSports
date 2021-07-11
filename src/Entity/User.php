@@ -47,11 +47,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $posts;
 
-    /**
-     * @ORM\Column(type="string", length=255)
+   /**
+     * @ORM\ManyToOne(targetEntity=Sport::class)
+     * @ORM\JoinColumn(nullable=false)
      */
-    // TODO: Borar esta propiedad y sus mñetodos asociados.
-    private $discipline;
+    private $sport;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -209,44 +209,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Post[]
-     */
-    public function getPosts(): Collection
+    // /**
+    //  * @return Collection|Post[]
+    //  */
+    // public function getPosts(): Collection
+    // {
+    //     return $this->posts;
+    // }
+
+    // public function addPost(Post $post): self
+    // {
+    //     if (!$this->posts->contains($post)) {
+    //         $this->posts[] = $post;
+    //         $post->setUser($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removePost(Post $post): self
+    // {
+    //     if ($this->posts->removeElement($post)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($post->getUser() === $this) {
+    //             $post->setUser(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    public function getSport(): ?Sport
     {
-        return $this->posts;
+        return $this->sport;
     }
 
-    public function addPost(Post $post): self
+    public function setSport(?Sport $sport): self
     {
-        if (!$this->posts->contains($post)) {
-            $this->posts[] = $post;
-            $post->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removePost(Post $post): self
-    {
-        if ($this->posts->removeElement($post)) {
-            // set the owning side to null (unless already changed)
-            if ($post->getUser() === $this) {
-                $post->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getDiscipline(): ?string
-    {
-        return $this->discipline;
-    }
-
-    public function setDiscipline(string $discipline): self
-    {
-        $this->discipline = $discipline;
+        $this->sport = $sport;
 
         return $this;
     }
