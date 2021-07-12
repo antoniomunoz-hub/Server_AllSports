@@ -32,8 +32,7 @@ class UserNormalizee
            'password' =>$user->getPassword(),
            'weigth' =>$user->getWeigth(),
            'country' =>$user->getCountry(),
-           //la columna id_sport
-           
+           'sport_id' =>$user->getSport()->getId()           
        ];
     }
 }
