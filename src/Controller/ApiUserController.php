@@ -27,8 +27,9 @@ class ApiUserController extends AbstractController
     {
         // // Coger el cuerpo de la solicutd HTTP
         // // y codificarlo como JSON.
-        $data = \json_decode($request->getContent(), true);
-        // dump($data);
+        $data = json_decode($request->getContent(), true);
+        dump($request->getContent());
+        dump($data);
 
         // // si lo transformas a objeto la forma de acceder a las propiedades es con el operador de objeto $data->name
         // // si lo transformas a array asociativo la forma de acceder a las propiedades es con la sintaxis de array $data['name']

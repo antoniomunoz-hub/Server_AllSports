@@ -77,6 +77,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $meContacts;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Sport::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $sport;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -280,6 +286,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->meContacts->removeElement($meContact)) {
             $meContact->removeContact($this);
         }
+
+        return $this;
+    }
+
+    public function getSport(): ?Sport
+    {
+        return $this->sport;
+    }
+
+    public function setSport(?Sport $sport): self
+    {
+        $this->sport = $sport;
 
         return $this;
     }

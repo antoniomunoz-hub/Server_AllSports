@@ -26,7 +26,7 @@ class SportNormalizee
     {
        return [
            'id' => $sport->getId(),
-           'name' => $sport->getName()
+           'name' => $sport->getName(),
        ];
     }
 }
