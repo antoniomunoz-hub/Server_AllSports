@@ -23,7 +23,7 @@ class ApiUserController extends AbstractController
         Request $request,
         SportRepository $sportRepository,
         EntityManagerInterface $em
-    ): Response
+    ):  Response
     {
         // // Coger el cuerpo de la solicutd HTTP
         // // y codificarlo como JSON.

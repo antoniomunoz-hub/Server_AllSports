@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Date;
 use App\Repository\UserRepository;
+use App\Service\PostNormalizee;
 
 /**
  * @Route("/api/post", name="api_post_")
@@ -23,8 +24,9 @@ class ApiPostController extends AbstractController
     public function add(
         Request $request,
         EntityManagerInterface $em,
-        UserRepository $userRepository
-    ): Response
+        UserRepository $userRepository,
+        PostNormalizee $postNormalizee
+    ):  Response
     {
        
         $data = \json_decode($request->getContent(), true);
@@ -46,7 +48,7 @@ class ApiPostController extends AbstractController
         $em->flush();
 
         return $this->json(
-            $post, // Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
+            $postNormalizee->postNormalizee($post),// Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
             Response::HTTP_CREATED
         );
 
