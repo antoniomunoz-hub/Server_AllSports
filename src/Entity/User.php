@@ -38,20 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Sport::class, inversedBy="users")
-     */
-    private $sports;
-
-    /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user", orphanRemoval=true)
      */
     private $posts;
-
-   /**
-     * @ORM\ManyToOne(targetEntity=Sport::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $sport;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -90,7 +79,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->sports = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->meContacts = new ArrayCollection();
@@ -183,72 +171,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    /**
-     * @return Collection|Sport[]
-     */
-    public function getSports(): Collection
-    {
-        return $this->sports;
-    }
-
-    public function addSport(Sport $sport): self
-    {
-        if (!$this->sports->contains($sport)) {
-            $this->sports[] = $sport;
-        }
-
-        return $this;
-    }
-
-    public function removeSport(Sport $sport): self
-    {
-        $this->sports->removeElement($sport);
-
-        return $this;
-    }
-
-    // /**
-    //  * @return Collection|Post[]
-    //  */
-    // public function getPosts(): Collection
-    // {
-    //     return $this->posts;
-    // }
-
-    // public function addPost(Post $post): self
-    // {
-    //     if (!$this->posts->contains($post)) {
-    //         $this->posts[] = $post;
-    //         $post->setUser($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removePost(Post $post): self
-    // {
-    //     if ($this->posts->removeElement($post)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($post->getUser() === $this) {
-    //             $post->setUser(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
-    public function getSport(): ?Sport
-    {
-        return $this->sport;
-    }
-
-    public function setSport(?Sport $sport): self
-    {
-        $this->sport = $sport;
-
-        return $this;
     }
 
     public function getFirstName(): ?string

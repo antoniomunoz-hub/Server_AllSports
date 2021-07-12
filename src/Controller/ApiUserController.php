@@ -41,7 +41,6 @@ class ApiUserController extends AbstractController
         $user->setFirstName($data['firstName']);
         $user->setEmail($data['email']);
         $user->setPassword($data['password']);
-        // $user->setSports($data['sports']);
         $user->setSex($data['sex']);
         $user->setWeigth($data['weigth']);
         $user->setCountry($data['country']);
