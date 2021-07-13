@@ -8,10 +8,15 @@ use Symfony\Component\HttpFoundation\UrlHelper;
 class PostNormalizee
 {
     private $urlHelper;
+    private $userNormalizee;
 
-    public function __construct(UrlHelper $constructorDeURL)
+    public function __construct(
+        UrlHelper $constructorDeURL,
+        UserNormalizee $userNormalizee
+        )
     {
         $this->urlHelper = $constructorDeURL;
+        $this->userNormalizee = $userNormalizee;
     }
 
     /**
@@ -28,7 +33,7 @@ class PostNormalizee
            'tittle' => $post->getTitle(),
            'photo' => $post->getPhoto(),
            'textPublication' => $post->getTextPublication(),
-        //    'user' => $post->getUser() // Mirar porque rezirculacion
+           'user' => $this->userNormalizee->userNormalizee($post->getUser()) // Mirar porque rezirculacion
        ];
     }
 }

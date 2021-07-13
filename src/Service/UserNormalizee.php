@@ -8,10 +8,15 @@ use Symfony\Component\HttpFoundation\UrlHelper;
 class UserNormalizee
 {
     private $urlHelper;
+    private $sportNormalizee;
 
-    public function __construct(UrlHelper $constructorDeURL)
+    public function __construct(
+        UrlHelper $constructorDeURL,
+        SportNormalizee $sportNormalizee
+        )
     {
         $this->urlHelper = $constructorDeURL;
+        $this->sportNormalizee = $sportNormalizee;
     }
 
     /**
@@ -22,7 +27,7 @@ class UserNormalizee
      * @return array|null
      */
     
-    public function sportNormalizee(User $user): ?array
+    public function userNormalizee(User $user): ?array
     {
        return [
            'id' => $user->getId(),
@@ -32,7 +37,7 @@ class UserNormalizee
            'password' =>$user->getPassword(),
            'weigth' =>$user->getWeigth(),
            'country' =>$user->getCountry(),
-           'sport_id' =>$user->getSport()->getId()           
+           'sport' => $this->sportNormalizee->sportNormalizee($user->getSport())           
        ];
     }
 }
