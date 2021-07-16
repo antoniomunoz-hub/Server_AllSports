@@ -83,6 +83,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $sport;
 
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $priceManager;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $career;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $speciality;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -298,6 +318,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSport(?Sport $sport): self
     {
         $this->sport = $sport;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getPriceManager(): ?string
+    {
+        return $this->priceManager;
+    }
+
+    public function setPriceManager(?string $priceManager): self
+    {
+        $this->priceManager = $priceManager;
+
+        return $this;
+    }
+
+    public function getCareer(): ?string
+    {
+        return $this->career;
+    }
+
+    public function setCareer(?string $career): self
+    {
+        $this->career = $career;
+
+        return $this;
+    }
+
+    public function getSpeciality(): ?string
+    {
+        return $this->speciality;
+    }
+
+    public function setSpeciality(?string $speciality): self
+    {
+        $this->speciality = $speciality;
 
         return $this;
     }

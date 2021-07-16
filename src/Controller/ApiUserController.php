@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\Date;
 use App\Service\UserNormalizee;
 
 /**
- * @Route("/api/users", name="api_user_")
+ * @Route("//api/users", name="api_user_")
  */
 class ApiUserController extends AbstractController
 {
@@ -28,16 +28,21 @@ class ApiUserController extends AbstractController
     ):  Response
     {
         $data = json_decode($request->getContent(), true);
-        dump($request->getContent());
-        dump($data);
+        // dump($request->getContent());
+        // dump($data);
 
 
         // // Crear un objeto usuario, estará vacío.
         $user = new User();
 
         $user->setFirstName($data['firstName']);
+        $user->setLastName($data['lastName']);
+        $user->setPriceManager($data['priceManager']);
+        $user->setCareer($data['career']);
+        $user->setSpeciality($data['speciality']);
         $user->setEmail($data['email']);
         $user->setPassword($data['password']);
+        $user->setRoles($data['roles']);
         $user->setSex($data['sex']);
         $user->setWeigth($data['weigth']);
         $user->setCountry($data['country']);
