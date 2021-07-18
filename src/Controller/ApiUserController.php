@@ -29,7 +29,7 @@ class ApiUserController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         // dump($request->getContent());
-        // dump($data);
+        dump($data);
 
 
         // // Crear un objeto usuario, estará vacío.
@@ -37,12 +37,22 @@ class ApiUserController extends AbstractController
 
         $user->setFirstName($data['firstName']);
         $user->setLastName($data['lastName']);
-        $user->setPriceManager($data['priceManager']);
-        $user->setCareer($data['career']);
-        $user->setSpeciality($data['speciality']);
+        if(array_key_exists("priceManager", $data))
+        {
+            $user->setPriceManager($data['priceManager']);
+        }
+        if(array_key_exists("career", $data))
+        {
+
+            $user->setCareer($data['career']);
+        }
+        if(array_key_exists("speciality", $data))
+        {
+            $user->setSpeciality($data['speciality']);
+        }
         $user->setEmail($data['email']);
         $user->setPassword($data['password']);
-        $user->setRoles($data['roles']);
+        $user->setRoles([$data['roles']]);
         $user->setSex($data['sex']);
         $user->setWeigth($data['weigth']);
         $user->setCountry($data['country']);
