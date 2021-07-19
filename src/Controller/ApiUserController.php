@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\SportRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,8 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
 use App\Service\UserNormalizee;
 
+//METODO POST, DELETE OK 
+
 /**
- * @Route("//api/users", name="api_user_")
+ * @Route("/api/users", name="api_user_")
  */
 class ApiUserController extends AbstractController
 {
@@ -89,14 +92,16 @@ class ApiUserController extends AbstractController
     
     public function show(
         int $id, 
-        User $userRepository): Response
+        UserRepository $userRepository,
+        UserNormalizee $userNormalizee): Response
     {
-        $data = $userRepository->findBy($id);
+        $data = $userRepository->find($id);
 
         dump($id);
         dump($data);
 
-        return $this->json($data);
+        return $this->json(
+            $userNormalizee->userNormalizee($data));
     }    
 
 
@@ -116,8 +121,6 @@ class ApiUserController extends AbstractController
         EntityManagerInterface $em
         ): Response
    {
-       //remove() prepara el sistema pero NO ejecuta la sentencia
-
        $em->remove($user);
        $em->flush();
        return $this->json(

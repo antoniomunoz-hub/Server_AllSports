@@ -14,7 +14,7 @@ use App\Service\PostNormalizee;
 use App\Repository\PostRepository;
 use App\Entity\User;
 
-
+                                                    //METODOS CGET Y PUT ERRORES ; POST, DELETE Y GET/ID ESTAN  OK 
 /**
  * @Route("/api/post", name="api_post_")
  */
@@ -49,35 +49,74 @@ class ApiPostController extends AbstractController
         $em->flush();
 
         return $this->json(
-            $postNormalizee->postNormalizee($post),// Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
+            $postNormalizee->postNormalizee($post),
             Response::HTTP_CREATED
         );
 
     }
 
     /**
-     * @Route("/", name="post_index", methods={"GET"})
+     * @Route(
+     *      "",
+     *      name="cget",
+     *      methods={"GET"}
+     * )
      */
     
-     public function index(PostRepository $postRepository, PostNormalizee $postNormalizee): Response
+     public function index(
+         Post $post,
+         Request $request,
+         PostRepository $postRepository, 
+         PostNormalizee $postNormalizee): Response
     {
-        $user = $this->getUser()->getId();
+        $result = $postRepository->findAll();
+        
+        $data = [];
 
-        // $postsResult = $postRepository->findBy(array('name' => 'Registration'));
-        //TODO hacer funcion en post repository que me devuleva array de objetos post pasandole el id de un usuario 
-        
-        
-        $posts = [];
-        foreach($postsResult as $post) {
-            $posts[] = $postNormalizee->postNormalizee($post);
+        foreach($result as $posts) {
+
+            $data[] = $postNormalizee->postNormalizee($posts);
+
         }
-
-        return $this->json(
-            $posts, // Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
-            Response::HTTP_OK
-        );
+        return $this->json($data);
+        // return $this->json(
+        //     $posts,
+        //     Response::HTTP_OK
+        // );
 
     }
+
+    
+
+     /**
+     * @Route(
+     *      "/{id}",
+     *      name="get",
+     *      methods={"GET"},
+     *      requirements={
+     *          "id": "\d+"
+     *      }
+     * )
+     */
+
+    public function show(
+        int $id, 
+        PostRepository $postRepository,
+        PostNormalizee $postNormalizee,
+        Request $request
+        ): Response
+    {
+        $data = json_decode($request->getContent());
+
+        $data = $postRepository->find($id);
+
+        dump($id);
+        dump($data);
+
+        return $this->json($postNormalizee->postNormalizee($data));
+    }
+
+
 
     /**
      * @Route(
@@ -93,13 +132,14 @@ class ApiPostController extends AbstractController
     public function update(
         Request $request,
         EntityManagerInterface $em,
-        UserRepository $userRepository,
         PostNormalizee $postNormalizee,
-        Post $post
+        Post $post,
+        PostRepository $postRepository
     ):  Response
     {
        
         $data = $request->$request;
+        $post = $postRepository->find($data->post_id);
     
     
         $post->setTitle($data['title']);
@@ -109,7 +149,8 @@ class ApiPostController extends AbstractController
         $em->flush();
 
         return $this->json(
-            $postNormalizee->postNormalizee($post),// Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
+            null,
+            // $postNormalizee->postNormalizee($post),
             Response::HTTP_NO_CONTENT
         );
     }
@@ -130,7 +171,6 @@ class ApiPostController extends AbstractController
         EntityManagerInterface $entityManager
         ): Response
    {
-       //remove() prepara el sistema pero NO ejecuta la sentencia
 
        $entityManager->remove($post);
        $entityManager->flush();
