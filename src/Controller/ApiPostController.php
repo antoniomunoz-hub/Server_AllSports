@@ -59,25 +59,25 @@ class ApiPostController extends AbstractController
      * @Route("/", name="post_index", methods={"GET"})
      */
     
-    //  public function index(PostRepository $postRepository): Response
-    // {
-        // $user = $this->getUser();
+     public function index(PostRepository $postRepository, PostNormalizee $postNormalizee): Response
+    {
+        $user = $this->getUser()->getId();
 
-        // $postsResult = $postRepository->findBy([
-        //    'user' = $this->getUser()
-        //]);
+        // $postsResult = $postRepository->findBy(array('name' => 'Registration'));
+        //TODO hacer funcion en post repository que me devuleva array de objetos post pasandole el id de un usuario 
+        
+        
+        $posts = [];
+        foreach($postsResult as $post) {
+            $posts[] = $postNormalizee->postNormalizee($post);
+        }
 
-        // $posts = [];
-        // foreach($postsResult as $post) {
-        //     $posts[] = $postNormalizee->postNormalizee($post);
-        // }
+        return $this->json(
+            $posts, // Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
+            Response::HTTP_OK
+        );
 
-        // return $this->json(
-        //     $posts, // Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
-        //     Response::HTTP_OK
-        // );
-
-    // }
+    }
 
     /**
      * @Route(
@@ -90,52 +90,52 @@ class ApiPostController extends AbstractController
      * )
      */
     
-//     public function update(
-//         Request $request,
-//         EntityManagerInterface $em,
-//         UserRepository $userRepository,
-//         PostNormalizee $postNormalizee,
-//         Post $post
-//     ):  Response
-//     {
+    public function update(
+        Request $request,
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+        PostNormalizee $postNormalizee,
+        Post $post
+    ):  Response
+    {
        
-//         $data = $request->$request;
+        $data = $request->$request;
     
     
-//         $post->setTitle($data['title']);
-//         $post->setPhoto($data['photo']);
-//         $post->setTextPublication($data['textPublication']);
+        $post->setTitle($data['title']);
+        $post->setPhoto($data['photo']);
+        $post->setTextPublication($data['textPublication']);
         
-//         $em->flush();
+        $em->flush();
 
-//         return $this->json(
-//             $postNormalizee->postNormalizee($post),// Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
-//             Response::HTTP_NO_CONTENT
-//         );
-//     }
+        return $this->json(
+            $postNormalizee->postNormalizee($post),// Normalizado MANUALMENTE (UserNormalizer), para evitar problemas de referencias circulares.
+            Response::HTTP_NO_CONTENT
+        );
+    }
 
-//     /**
-//      * @Route(
-//      *      "/{id}",
-//      *      name="delete",
-//      *      methods={"DELETE"},
-//      *      requirements={
-//      *          "id": "\d+"
-//      *      }
-//      * )
-//      */
+    /**
+     * @Route(
+     *      "/{id}",
+     *      name="delete",
+     *      methods={"DELETE"},
+     *      requirements={
+     *          "id": "\d+"
+     *      }
+     * )
+     */
     
-//     public function delete(
-//         Post $post,
-//         EntityManagerInterface $entityManager
-//         ): Response
-//    {
-//        //remove() prepara el sistema pero NO ejecuta la sentencia
+    public function delete(
+        Post $post,
+        EntityManagerInterface $entityManager
+        ): Response
+   {
+       //remove() prepara el sistema pero NO ejecuta la sentencia
 
-//        $entityManager->remove($post);
-//        $entityManager->flush();
-//        return $this->json(
-//            null, Response::HTTP_NO_CONTENT
-//        );
-//    }
+       $entityManager->remove($post);
+       $entityManager->flush();
+       return $this->json(
+           null, Response::HTTP_NO_CONTENT
+       );
+   }
 }
