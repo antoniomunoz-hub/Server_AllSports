@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
 use App\Service\UserNormalizee;
 
-//METODO POST, DELETE OK 
+//CRUD COMPLETO CAMBIAR HASEO DE PASSWORD
 
 /**
  * @Route("/api/users", name="api_user_")
@@ -140,31 +140,37 @@ class ApiUserController extends AbstractController
      */
     
     public function update(
-        User $user,
+        int $id,
         EntityManagerInterface $em,
         Request $request,
-        SportRepository $sportRepository
+        SportRepository $sportRepository,
+        UserRepository $userRepository
        ): Response
     {
-        $data = $request->request;
+        $data = json_decode($request->getContent(), true);
+        $user = $userRepository->find($id);
+
         $user->setFirstName($data['firstName']);
         $user->setLastName($data['lastName']);
-        $user->setPriceManager($data['priceManager']);
-        $user->setCareer($data['career']);
-        $user->setSpeciality($data['speciality']);
+        if(array_key_exists('priceManager', $data))
+        {
+            $user->setPriceManager($data['priceManager']);
+        }
+        if(array_key_exists('career', $data))
+        {
+
+            $user->setCareer($data['career']);
+        }
+        if(array_key_exists('speciality', $data))
+        {
+            $user->setSpeciality($data['speciality']);
+        }
         $user->setEmail($data['email']);
         $user->setPassword($data['password']);
         $user->setRoles([$data['roles']]);
         $user->setSex($data['sex']);
         $user->setWeigth($data['weight']);
         $user->setCountry($data['country']);
-
-
-        $birth = \DateTime::createFromFormat('Y-m-d', $data['birth']);
-        $user->setBirthdate($birth);
-
-        $sport = $sportRepository->find($data['sport_id']);
-        $user->setSport($sport);
 
         $em->flush();
 

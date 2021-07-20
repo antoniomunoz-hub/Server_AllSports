@@ -64,8 +64,6 @@ class ApiPostController extends AbstractController
      */
     
      public function index(
-         Post $post,
-         Request $request,
          PostRepository $postRepository, 
          PostNormalizee $postNormalizee): Response
     {
@@ -78,6 +76,7 @@ class ApiPostController extends AbstractController
             $data[] = $postNormalizee->postNormalizee($posts);
 
         }
+
         return $this->json($data);
         // return $this->json(
         //     $posts,
@@ -130,16 +129,14 @@ class ApiPostController extends AbstractController
      */
     
     public function update(
+        int $id,
         Request $request,
         EntityManagerInterface $em,
-        PostNormalizee $postNormalizee,
-        Post $post,
         PostRepository $postRepository
     ):  Response
     {
-       
-        $data = $request->$request;
-        $post = $postRepository->find($data->post_id);
+        $data = json_decode($request->getContent(), true);
+        $post = $postRepository->find($id);
     
     
         $post->setTitle($data['title']);
