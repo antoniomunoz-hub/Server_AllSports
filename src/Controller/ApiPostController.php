@@ -56,6 +56,21 @@ class ApiPostController extends AbstractController
     }
 
     /**
+     * @Route("", name="upload", methods={"POST"})
+     */
+
+    public function upload(
+        Request $request
+    ):  Response
+    {
+        // dd($request->files->get('myFile'));
+        return $this->json(
+            Response::HTTP_CREATED
+        );   
+    } 
+        
+
+    /**
      * @Route(
      *      "",
      *      name="cget",

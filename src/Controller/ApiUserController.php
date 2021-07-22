@@ -96,13 +96,35 @@ class ApiUserController extends AbstractController
         UserNormalizee $userNormalizee): Response
     {
         $data = $userRepository->find($id);
-
+        
         dump($id);
         dump($data);
 
         return $this->json(
             $userNormalizee->userNormalizee($data));
+    }   
+    
+     /**
+     * @Route(
+     *      "/profile",
+     *      name="get",
+     *      methods={"GET"}
+     * )
+     */
+    
+    public function showprofile(
+        UserRepository $userRepository,
+        UserNormalizee $userNormalizee): Response
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        // die($user->getId());
+        // dump($data);
+
+        return $this->json(
+            $userNormalizee->userNormalizee($user));
     }    
+
 
 
     /**
