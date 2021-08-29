@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
 use App\Service\UserNormalizee;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
 
 //CRUD COMPLETO CAMBIAR HASEO DE PASSWORD
 
@@ -79,7 +81,50 @@ class ApiUserController extends AbstractController
         
     }
 
-      /**
+    /**
+    * @Route(
+    *      "/uploadImage/{id}",
+    *      name="uploadImage",
+    *      methods={"POST"},
+    *      requirements={
+    *          "id": "\d+"
+    *      }     
+    * )
+    */
+    public function uploadImage(
+        User $user, 
+        Request $request, 
+        EntityManagerInterface $entityManager):Response {
+
+        if($request->files->has('File')) {
+            $avatarFile = $request->files->get('File');
+
+            $newFilename = uniqid().'.'.$avatarFile->guessExtension();
+
+            // Intentamos mover el fichero a la carpeta public
+            try {
+                $avatarFile->move(
+                    $request->server->get('DOCUMENT_ROOT') . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'avatar', // El primer parámetro es la ruta
+                    $newFilename // El 2º param es el nombre del fichero
+                );
+            } catch (FileException $error) {
+                throw new \Exception($error->getMessage());
+            }
+
+            $user->setImgpath($newFilename);
+        }
+
+        $entityManager->flush();
+        
+        return $this->json(
+            null,
+            Response::HTTP_NO_CONTENT
+        );
+    }
+
+
+
+    /**
      * @Route(
      *      "/{id}",
      *      name="get",

@@ -103,6 +103,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $speciality;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $imgpath;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -366,6 +371,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSpeciality(?string $speciality): self
     {
         $this->speciality = $speciality;
+
+        return $this;
+    }
+
+    public function getImgpath(): ?string
+    {
+        return $this->imgpath;
+    }
+
+    public function setImgpath(string $imgpath): self
+    {
+        $this->imgpath = $imgpath;
 
         return $this;
     }
