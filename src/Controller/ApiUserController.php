@@ -13,11 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
 use App\Service\UserNormalizee;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 //CRUD COMPLETO CAMBIAR HASEO DE PASSWORD
 
-/**
+/** 
  * @Route("/api/users", name="api_user_")
  */
 class ApiUserController extends AbstractController
@@ -29,6 +30,7 @@ class ApiUserController extends AbstractController
         Request $request,
         SportRepository $sportRepository,
         EntityManagerInterface $em,
+        UserPasswordHasherInterface $hasher,
         UserNormalizee $userNormalizee
     ):  Response
     {
@@ -55,7 +57,9 @@ class ApiUserController extends AbstractController
             $user->setSpeciality($data['speciality']);
         }
         $user->setEmail($data['email']);
-        $user->setPassword($data['password']);
+        $hash = $hasher->hashPassword($user, $data['password']);
+        $user->setPassword($hash);
+        // $user->setPassword($passwordHasher->hashPassword($data['password']));
         $user->setRoles([$data['roles']]);
         $user->setSex($data['sex']);
         $user->setWeigth($data['weight']);
